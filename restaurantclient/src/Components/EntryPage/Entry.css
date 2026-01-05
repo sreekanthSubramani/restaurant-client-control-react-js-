@@ -1,0 +1,39 @@
+*{
+    margin: 0px;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.handleEntry{
+    background-color: #242424;
+    height:  100lvh;
+    width: 100lvw;
+    display: flex;
+    flex-direction: row;
+}
+.leftHalfWindow{
+    width: 50%;
+    height: 100%;
+}
+.rightHalfWindow{
+    display: flex;
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.formClass{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+    color: black;
+}
+.inputForm1{
+    color: black;
+}
+.buttonLogin{
+    background-color: gray;
+    color: #fff;
+}
+
