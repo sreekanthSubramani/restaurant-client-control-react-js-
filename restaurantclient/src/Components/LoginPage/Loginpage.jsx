@@ -7,11 +7,11 @@ import { addCategory } from '../../Redux/Slice/CategorySlice'
 export default function LoginPageComp(){
 
     const [categories, setCategories] = useState([])
-    const categoryDispatch = useDispatch(addCategory())
+    const categoryDispatch = useDispatch()
     const selectedCats = useSelector((state)=> state.category)
     
     //menu items here
-    const [menuCats, setMenuCats]= useState([
+    const [menuCats, setMenuCats]= useState(
         {
             categoryName : '',
             collection : false,
@@ -19,7 +19,7 @@ export default function LoginPageComp(){
             outofStock : false,
             inStock : true,
         }
-    ])
+    )
 
     const [categoryName, setCategoryName] = useState('')
     const [collection, setCollection] = useState(false)
@@ -29,23 +29,31 @@ export default function LoginPageComp(){
     const [inStock, setInStock] = useState(false)
 
     function handleInitialCategory(){
-        setMenuCats(((prev)=> [...prev, {
+        setMenuCats({
             categoryName : categoryName,
             collection : collection,
             delivery : delivery,
             stockIn : outofStock,
-        }]))
+        })
 
-        if(menuCats.length > 0){
-            reduxAddCats(menuCats)
-        }
+
+        categoryDispatch(
+            addCategory({
+            categoryName : categoryName,
+            collection : collection,
+            delivery : delivery,
+            outofStock : outofStock
+        })
+    )
+
+
+        setCategoryName('')
+        setCollection(false)
+        setDelivery(false)
     }
 
-    function reduxAddCats(arrayOfCats){
-        categoryDispatch(arrayOfCats)
-    }
-
-    console.log(selectedCats, 'selected cats')
+console.log(menuCats, 'menu cats')
+console.log(selectedCats, 'selected redux state')
 
 function handleStocks(){
     setInStock((prev)=> !prev)
