@@ -1,6 +1,57 @@
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import './Loginpage.css'
+import { addCategory } from '../../Redux/Slice/CategorySlice'
+
 
 export default function LoginPageComp(){
+
+    const [categories, setCategories] = useState([])
+    const categoryDispatch = useDispatch(addCategory())
+    const selectedCats = useSelector((state)=> state.category)
+    
+    //menu items here
+    const [menuCats, setMenuCats]= useState([
+        {
+            categoryName : '',
+            collection : false,
+            delivery : false,
+            outofStock : false,
+            inStock : true,
+        }
+    ])
+
+    const [categoryName, setCategoryName] = useState('')
+    const [collection, setCollection] = useState(false)
+    const [delivery, setDelivery] = useState(false)
+    const [outofStock, setOutOfStock] = useState(true)
+
+    const [inStock, setInStock] = useState(false)
+
+    function handleInitialCategory(){
+        setMenuCats(((prev)=> [...prev, {
+            categoryName : categoryName,
+            collection : collection,
+            delivery : delivery,
+            stockIn : outofStock,
+        }]))
+
+        if(menuCats.length > 0){
+            reduxAddCats(menuCats)
+        }
+    }
+
+    function reduxAddCats(arrayOfCats){
+        categoryDispatch(arrayOfCats)
+    }
+
+    console.log(selectedCats, 'selected cats')
+
+function handleStocks(){
+    setInStock((prev)=> !prev)
+    setOutOfStock((prev)=> !prev)
+}
+
     return(
         <div className='maindiv'>
 
@@ -12,35 +63,63 @@ export default function LoginPageComp(){
                     <div className='toolBoxCat'>
 
                         <div className='insideToolBox'> 
-                                <p>Category Name </p>
-                                <input type="text" placeholder='*eg Briyani' className='inputCat' list='categories'/>
+                                <p> Add Category Name : </p>
+                                <input 
+                                type="text" 
+                                placeholder='*eg Pizza' 
+                                className='inputCat' 
+                                list='categories'
+                                onChange={(e)=> setCategoryName(e.target.value)}
+                                value={categoryName}
+                                />
 
                                 <datalist id='categories'>
-                                    <option value="Pizza"/>
-                                    <option value="Briyani"/>
-                                    <option value="Burgers"/>
-                                    <option value="Fried Rice"/>
-                                    <option value="Beverages"/>
-                                    <option value="Wraps"/>
-
+                                {categories.map((cats, index)=>{
+                                    return(
+                                    <option value={cats}/>
+                                )
+                                })}
                                 </datalist>
+  
 
                                 <div className='availabilityBox'>
-                                <input type="checkbox" />
+                                <input 
+                                type="checkbox"
+                                onChange={()=> setCollection((prev)=> !prev)}
+                                value={collection}
+                                checked={collection ? true : false}
+                                />
                                 <p>Collection</p>
 
-                                <input type="checkbox" />
+                                <input 
+                                type="checkbox"
+                                onChange={()=> setDelivery((prev)=> !prev)}
+                                value={delivery}
+                                checked={delivery ? true : false}
+                                />
                                 <p>Delivery</p>
                                 </div>
 
 
                         <div className='stockOptions'>
-                            <button className='stockButtons'>Out of stock</button>
-                            <button className='stockButtons'>In stock</button>
-                        </div>  
+
+                            <div className={inStock ? 'hoverTheStock': 'outOfStockClass'} onClick={handleStocks}>
+                                    {inStock
+                                        ? 
+                                        <h4>Out of Stock</h4>
+                                        :
+                                        <h4 style={{backgroundColor : "green"}}>In Stock</h4>}
+                            </div>
+                            </div>  
+                        
+                        <div className='imgUpload'>
+                        <p>Upload category picture</p>
+                        <input type="file" />
+                        </div>
+
 
                         <div className='finalSubmitBtn'>
-                            <button className='submitHere'>Submit</button>
+                            <button className='submitHere' onClick={handleInitialCategory}>Submit</button>
                         </div>
 
                         </div>
@@ -49,15 +128,26 @@ export default function LoginPageComp(){
 
                     {/* //subcategory updater */}
                     <div className='toolBoxCat'>
-
-
+                           <div className='insideToolBox'>
+                                <p>Subcategory Updater : </p>
+                                
+                            </div>
                     </div>
+
+
+
+                    {/* item updater */}
+
+
                     <div className='toolBoxCat'>
+
+                            <div className='insideToolBox'>
+
+                            </div>
                     
 
                     </div>
                 </div>
-
         </div>
 
         <div className='rightDiv'>

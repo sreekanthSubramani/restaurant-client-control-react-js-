@@ -62,7 +62,7 @@
 }
 .stockOptions{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -83,5 +83,30 @@
     height: 50px;
     border-radius: 40px;
     border: 0px;
+    background-color: green;
+}
+.imgUpload{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    gap: 10px;
+}
+.hoverTheStock{
+    display: flex;
+    width: 70%;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.outOfStockClass{
+    display: flex;
+    width: 70%;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
     background-color: green;
 }
