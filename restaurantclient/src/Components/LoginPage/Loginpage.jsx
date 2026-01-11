@@ -2,14 +2,20 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Loginpage.css'
 import { addCategory } from '../../Redux/Slice/CategorySlice'
+import { addSubCategory } from '../../Redux/Slice/SubCategorySlice'
+import { AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 
 export default function LoginPageComp(){
 
     const [categories, setCategories] = useState([])
     const categoryDispatch = useDispatch()
+    const subCategoryDispatch = useDispatch()
+
     const selectedCats = useSelector((state)=> state.category)
-    
+    const selectedSubCats = useSelector((state)=> state.subCategory)
+
     //menu items here
     const [menuCats, setMenuCats]= useState(
         {
@@ -17,7 +23,6 @@ export default function LoginPageComp(){
             collection : false,
             delivery : false,
             outofStock : false,
-            inStock : true,
         }
     )
 
@@ -27,6 +32,13 @@ export default function LoginPageComp(){
     const [outofStock, setOutOfStock] = useState(true)
 
     const [inStock, setInStock] = useState(false)
+
+    const [subCatOnline, setSubCatOnline] = useState(true)
+
+    //for updating the sub category for the opted category
+    const[selectedCat, onSetSelectedCat] = useState('')
+    const [subCategory, setSubCategory] = useState('')
+
 
     function handleInitialCategory(){
         setMenuCats({
@@ -52,18 +64,37 @@ export default function LoginPageComp(){
         setDelivery(false)
     }
 
-console.log(menuCats, 'menu cats')
-console.log(selectedCats, 'selected redux state')
 
 function handleStocks(){
     setInStock((prev)=> !prev)
     setOutOfStock((prev)=> !prev)
 }
 
+function handleSubCatOnline(){
+    setSubCatOnline((prev)=> !prev)
+}
+
+
+function handleImgUpload(){
+    
+}
+
+function handleSubCatData(){
+    subCategoryDispatch(addSubCategory({
+        category : selectedCat,
+        subCategory : subCategory,
+        online : subCatOnline
+    }))
+    setSubCategory('')
+}
+
+console.log(selectedSubCats, 'sub cats selected')
+
+
     return(
         <div className='maindiv'>
 
-            <div className='divSplitter'>
+        <div className='divSplitter'>
         <div className='leftDiv'>
             <p>Menu updater tool</p>
 
@@ -122,7 +153,7 @@ function handleStocks(){
                         
                         <div className='imgUpload'>
                         <p>Upload category picture</p>
-                        <input type="file" />
+                        <input type="file" accept='image/*' onChange={handleImgUpload} />
                         </div>
 
 
@@ -138,8 +169,51 @@ function handleStocks(){
                     <div className='toolBoxCat'>
                            <div className='insideToolBox'>
                                 <p>Subcategory Updater : </p>
+
+                                <input 
+                                className='inputCat' 
+                                list='catList'
+                                onChange={(e)=> onSetSelectedCat(e.target.value)}
+                                value={selectedCat}
+                                />
+                               
+                                <datalist id='catList'>
+                                    {selectedCats.slice(1).map((elem, index)=>{
+                                        return(
+                                            <option key={index}>{elem.categoryName}</option>
+                                        )
+                                    })}
+                                </datalist>
                                 
+                                <input 
+                                type='text'
+                                className='inputCat'
+                                onChange={(e)=> setSubCategory(e.target.value)}
+                                value={subCategory}
+                                />
+                                
+                                <div className='stockOptions'>
+                                <div className={subCatOnline ? 'outOfStockClass' : 'hoverTheStock'} onClick={handleSubCatOnline}>
+                                        {subCatOnline
+                                            ? 
+                                            <h4 style={{backgroundColor : "green"}}>In Stock</h4>
+                                            :
+                                            <h4>Out of Stock</h4>
+                                            }
+                                </div>
+                                </div>
+                                
+                                <div className='finalSubmitBtn'>
+                                    {selectedCat
+                                    ?
+                                    <button className='submitHere' onClick={handleSubCatData}>Submit Subcategory</button>
+                                    :
+                                    <h4>Please select category to add your Subcategory</h4>
+                                    }
+                                </div>
                             </div>
+
+                            
                     </div>
 
 
@@ -159,10 +233,56 @@ function handleStocks(){
         </div>
 
         <div className='rightDiv'>
-            <div >
-            <p style={{backgroundColor : "white", color : "black"}}>Customer View</p>
+            <div className='cxViewHeading'>
+            <p className='cxViewHeading'>Customer View</p>
+                    {selectedCats.slice(1).map((cats,index)=>{
+            return(
+                <div key={index} className='catsCxView'>
+                    <div className='catNameHere'>
+                        <h3>{cats.categoryName}</h3>
+                    </div>
+                    
+                    
+                    <div className='catsDelsStocks'>
+                        {/* cols delivery stocks */}
+                    <div className='microContent'> 
+                        <p>Collection</p>
+                        {cats.collection == true ?
+                        <p style={{color : "green"}}>Open</p>
+                        :
+                        <p style={{color : 'red'}}>Close</p>
+                        }
+                    </div>
+
+                    <div className='microContent'>
+                        <p>Delivery</p>
+                        {cats.delivery == true ?
+                        <p style={{color : "green"}}>Open</p>
+                        :
+                        <p style={{color : 'red'}}>Close</p>
+                        }
+                    </div>
+                        <div className='microContent'>
+                        <p>Stock</p>
+                        {cats.outofStock == true ?
+                        <div>
+                        <AiOutlineCheck />
+                        </div>
+                        :
+                        <AiOutlineClose />
+                        }
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            )
+        })}
             </div>
         </div>
+
         
         </div>
 
