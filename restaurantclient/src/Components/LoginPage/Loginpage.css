@@ -7,7 +7,7 @@
     background-color: black;
 }
 .mainDiv{
-    height: 100dvh;
+    height: 80dvh;
     width: 100dvh;
     display: flex;
     flex-direction: row;
@@ -27,7 +27,7 @@
 }
 .divSplitter{
     display: flex;
-    flex-direction: row;
+    flex-direction: row
 }
 .categoryUpdater{
     display: flex;
@@ -36,6 +36,7 @@
     width: 100%;
     height: 100%;
     gap: 40px;
+    margin-top: -20px;
 }
 .toolBoxCat{
     display: flex;
@@ -171,3 +172,76 @@
  li{
     list-style: none;
  }
+ .catsAndSubCats{
+    display: flex;  
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 50%;
+    border: 1px solid white;
+ }
+ .catsAndSubs{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+ }
+ .catsFlexRow{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+ }
+.inputTypeCat{
+    width: 100px;
+    background-color: white;
+    color: black;
+}
+.inputBoxItemUpdater{
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    color: black;
+}
+.inputBoxItemUpdaterPrice{
+    height: 50px;   
+    background-color: white;
+    color: black;
+    font-size: 20px;
+    width: 50%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.insideItemUpdater{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.addItemBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    background-color: green;
+    padding: 10px;
+    border-radius: 20px;
+}
+.fullLeftDiv{
+    height: 80dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.headingMenuUpdater{
+    height: 130px;
+    width: auto;
+}
+.addOnPageDiv{
+    height: auto;
+    width: auto;
+}

@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Loginpage.css'
 import { addCategory } from '../../Redux/Slice/CategorySlice'
 import { addSubCategory } from '../../Redux/Slice/SubCategorySlice'
+import { addItem } from '../../Redux/Slice/Itemslice'
+
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
+import Addonpage from '../AddonPage/AddonPage'
 
 
 export default function LoginPageComp(){
@@ -12,9 +15,11 @@ export default function LoginPageComp(){
     const [categories, setCategories] = useState([])
     const categoryDispatch = useDispatch()
     const subCategoryDispatch = useDispatch()
+    const itemDispatch = useDispatch()
 
     const selectedCats = useSelector((state)=> state.category)
     const selectedSubCats = useSelector((state)=> state.subCategory)
+    const itemAdded = useSelector((state)=> state.addItem)
 
     //menu items here
     const [menuCats, setMenuCats]= useState(
@@ -39,6 +44,14 @@ export default function LoginPageComp(){
     const[selectedCat, onSetSelectedCat] = useState('')
     const [subCategory, setSubCategory] = useState('')
 
+    //for updating item
+
+    const [categoryNameItem, setCategoryNameItem] = useState('')
+    const [subCatItSelected, setSubCatItSelected] = useState('')
+    const [itemNameBlock , setItemNameBlock] = useState('')
+    const [itemPriceBlock, setItemPriceBlock] = useState('')
+
+
 
     function handleInitialCategory(){
         setMenuCats({
@@ -57,8 +70,6 @@ export default function LoginPageComp(){
             outofStock : outofStock
         })
     )
-
-
         setCategoryName('')
         setCollection(false)
         setDelivery(false)
@@ -80,15 +91,29 @@ function handleImgUpload(){
 }
 
 function handleSubCatData(){
-    subCategoryDispatch(addSubCategory({
-        category : selectedCat,
-        subCategory : subCategory,
-        online : subCatOnline
-    }))
+    subCategoryDispatch(
+            addSubCategory({
+            category : selectedCat,
+            subCategory : subCategory,
+            online : subCatOnline
+        })
+)
+
     setSubCategory('')
 }
 
-console.log(selectedSubCats, 'sub cats selected')
+
+function handleItemUpdater(){
+    
+
+    itemDispatch(
+        addItem({
+        categoryNameItem : categoryNameItem,
+        subCatItSelected : subCatItSelected,
+        itemNameBlock : itemNameBlock,
+        itemPriceBlock : String(itemPriceBlock)
+    }))
+}
 
 
     return(
@@ -96,11 +121,18 @@ console.log(selectedSubCats, 'sub cats selected')
 
         <div className='divSplitter'>
         <div className='leftDiv'>
-            <p>Menu updater tool</p>
+            
+            <div className='fullLeftDiv'>
+                
+                {/* heading */}
+                <div className='headingMenuUpdater'>
+                <h1>Menu Updater :</h1>
+                </div>
+
 
                 <div className='categoryUpdater'>
                     <div className='toolBoxCat'>
-
+                    
                         <div className='insideToolBox'> 
                                 <p> Add Category Name : </p>
                                 <input 
@@ -115,7 +147,7 @@ console.log(selectedSubCats, 'sub cats selected')
                                 <datalist id='categories'>
                                 {categories.map((cats, index)=>{
                                     return(
-                                    <option value={cats}/>
+                                    <option value={cats} key={index}/>
                                 )
                                 })}
                                 </datalist>
@@ -172,15 +204,15 @@ console.log(selectedSubCats, 'sub cats selected')
 
                                 <input 
                                 className='inputCat' 
-                                list='catList'
+                                list='catList1'
                                 onChange={(e)=> onSetSelectedCat(e.target.value)}
                                 value={selectedCat}
                                 />
                                
-                                <datalist id='catList'>
+                                <datalist id='catList1'>
                                     {selectedCats.slice(1).map((elem, index)=>{
                                         return(
-                                            <option key={index}>{elem.categoryName}</option>
+                                            <option key={index} value={elem.categoryName} />
                                         )
                                     })}
                                 </datalist>
@@ -222,14 +254,94 @@ console.log(selectedSubCats, 'sub cats selected')
 
 
                     <div className='toolBoxCat'>
-
                             <div className='insideToolBox'>
+                                <p>Item Updater : </p>
+                                
+                                <div className='catsAndSubs'>
+                                <div className='catsFlexRow'>
+                                    <p>Category</p>
+                                    <input 
+                                    type="text" 
+                                    className='inputTypeCat'
+                                    list='allCats'
+                                    onChange={(e)=> setCategoryNameItem(e.target.value)}
+                                    value={categoryNameItem}
+                                    />
+
+                                    <datalist id='allCats'>
+                                        {selectedSubCats.slice(1).map((cat, index)=>{
+                                            return(
+                                                <option value={cat.category} key={index} />
+                                            )
+                                        })}  
+                                    </datalist>
+                                
+                                </div>
+
+                                <div className='catsFlexRow'>
+                                    <p>Subcategory</p>
+                                    <input 
+                                    type="text" 
+                                    className='inputTypeCat'
+                                    list='subCatsSelection'
+                                    value={subCatItSelected}
+                                    onChange={(e)=> setSubCatItSelected(e.target.value)}
+                                    />
+
+                                    <datalist id='subCatsSelection'>
+                                        {selectedSubCats.filter(subCats=> subCats.category == categoryNameItem).map((elem, index)=>{
+                                            return(
+                                                <option value={elem.subCategory} key={index} />
+                                            )
+                                        })}
+
+                                    </datalist>
+
+
+                                </div>
+                                </div>
+
+                                <div className='insideItemUpdater'>
+                                
+                                <div>
+                                <p>Item Name : </p>
+                                <input 
+                                type="text"  
+                                className='inputBoxItemUpdater'
+                                onChange={(e)=> setItemNameBlock(e.target.value)}
+                                value={itemNameBlock}
+                                />
+                                </div>
+                                
+                                <div className='insideItemUpdater'>
+                                <p>Item Price : </p>
+                                <input 
+                                type="number"  
+                                className='inputBoxItemUpdaterPrice'
+                                onChange={(e)=>setItemPriceBlock(String(e.target.value))}
+                                value={itemPriceBlock}
+                                />
+
+                                </div>
+                                
+                                </div>
+                                <div className='insideItemUpdater'>
+                                        <div className='addItemBtn' onClick={handleItemUpdater}>
+                                            Add Item 
+                                        </div>
+                                </div>
+
 
                             </div>
-                    
-
                     </div>
                 </div>
+
+                <div className='addOnPageDiv'>
+                    <Addonpage />           
+                </div>
+                </div>
+            
+
         </div>
 
         <div className='rightDiv'>
