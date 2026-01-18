@@ -47,20 +47,20 @@ export default function Addonpage(){
                 }))
         }
 
+        
+        function handleAddOnsAlone(){
+
+            addOnsDispatch(addAddons({
+                addOnHeading : addOnHeading,
+                addOnName : addOnName,
+                addOnPrice : addOnPrice
+
+            }))
+               
+        }   
+
         console.log(addOnSelector, 'add on slice')
 
-        function handleAddOnsAlone(){
-                const getTitle = addOnSelector.addOnDetails[0].addOnHeading
-                if(getTitle === addOnHeading){
-                   addOnsDispatch(
-                    addAddons([{
-                        addOnName : addOnName,
-                        addOnPrice : addOnPrice
-                    }]))
-                }else{
-                    console.log('no you did not lock the heading')
-                }
-        }   
         
         function handleNewHeadings(){
 

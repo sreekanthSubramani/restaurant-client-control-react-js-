@@ -13,12 +13,19 @@ const sliceForAddon = createSlice({
             state.addOnTitle = action.payload.addOnTitle
             state.addOnDetails.push(...action.payload.addOnDetails)
         },
+
         addAddons : (state, action)=>{
-             state.addOnDetails[0].addOns.push({
+            let setAddons = state.addOnDetails.find(addOnElems=>
+                addOnElems.addOnHeading == action.payload.addOnHeading
+            )
+
+
+            setAddons.addOns.push({
                 addOnName : action.payload.addOnName,
                 addOnPrice : action.payload.addOnPrice
-             })
+            })
         },
+
         addNewHeadingGroup : (state, action)=>{
             state.addOnDetails.push({...action.payload.addOnDetails})
         }
