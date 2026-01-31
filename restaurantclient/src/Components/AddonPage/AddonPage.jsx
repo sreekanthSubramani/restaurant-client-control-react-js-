@@ -3,10 +3,12 @@ import { fullSetAddOn,addAddons,addNewHeadingGroup } from '../../Redux/Slice/Add
 import { useState } from 'react'
 import { AiFillLock } from "react-icons/ai";
 import { AiFillUnlock } from "react-icons/ai";
+import ShowAddonsView from './ShowAddonsView/ShowAddons';
+import { AiOutlineLink } from "react-icons/ai";
 import './Addonpage.css'
 
 
-//adding addons alone with headings - to find the right heading and adding addons
+    //Show the Addons selected and work on linkage
 
 export default function Addonpage(){
     
@@ -16,6 +18,7 @@ export default function Addonpage(){
     const [addOnPrice, setAddOnPrice] = useState('')
     const [lockTitle, setLockTitle] = useState(false)
     const [lockHeading, setLockHeading] = useState(false)
+    const [showAddons, setShowAddons] = useState(false)
 
     
     function lockTitleTitle(){
@@ -33,7 +36,7 @@ export default function Addonpage(){
     const addHeadingGroup = useDispatch()
 
         function handleAddOnGroup(){
-                
+                setShowAddons(true)
                 const addOnDetails = [{
                     addOnHeading : addOnHeading,
                     addOns : [{
@@ -59,8 +62,6 @@ export default function Addonpage(){
                
         }   
 
-        console.log(addOnSelector, 'add on slice')
-
         
         function handleNewHeadings(){
 
@@ -76,6 +77,16 @@ export default function Addonpage(){
                 addOnDetails : addOnDetails
             }))
         }
+
+        function clearAll(){
+            setAddOnTitle('')
+            setAddOnHeading('')
+            setAddOnName('')
+            setAddOnPrice('')
+        }
+
+
+        const addOnsHere = useSelector((state)=> state.addOnSlice)
     
     return(
         <>
@@ -115,6 +126,12 @@ export default function Addonpage(){
                        {lockHeading ?  <AiFillLock onClick={lockHeadingName} size={40}/> : <AiFillUnlock onClick={lockHeadingName} size={40}/>}
                     </div>
                 </div>
+            <div className='submitBtn'>
+                <button onClick={handleAddOnGroup}>Submit</button>
+                <button onClick={handleAddOnsAlone}>Submit Addons Alone</button>
+                <button onClick={handleNewHeadings}>Submit Addons Headings</button>
+                <button onClick={clearAll}>Clear All</button>
+            </div>
                 </div>
 
                 <div className='adddOnSecond'>
@@ -137,6 +154,23 @@ export default function Addonpage(){
 
                  <div className='adddOnThird'>
                     {/* addon heading space */}
+                    {showAddons ? 
+                    <>
+                    <p className='addOnTitle'>Title : {addOnsHere.addOnTitle}</p>
+                    <div className='setRowWise'>
+                    <div className='showAddonsTable'>
+                    <ShowAddonsView />
+                    </div>
+                    <AiOutlineLink size={30}/> 
+                    </div>
+                    </>
+                    :
+                    <div className='showAddonsTable'>
+                        <div className='withoutAddons'>
+                        <p>Your Addons will appear here</p>
+                        <h4>Enter details and click Submit</h4>
+                        </div>
+                    </div>}
 
 
                         
@@ -144,11 +178,7 @@ export default function Addonpage(){
 
             </div>            
 
-            <div className='submitBtn'>
-            <button onClick={handleAddOnGroup}>Submit</button>
-            <button onClick={handleAddOnsAlone}>Submit Addons Alone</button>
-             <button onClick={handleNewHeadings}>Submit Addons Headings</button>
-            </div>
+
         </div>
         </>
     )
