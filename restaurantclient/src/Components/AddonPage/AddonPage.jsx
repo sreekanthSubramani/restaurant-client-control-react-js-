@@ -5,7 +5,13 @@ import { AiFillLock } from "react-icons/ai";
 import { AiFillUnlock } from "react-icons/ai";
 import ShowAddonsView from './ShowAddonsView/ShowAddons';
 import { AiOutlineLink } from "react-icons/ai";
+import { AiOutlineDoubleRight } from "react-icons/ai";
 import './Addonpage.css'
+
+
+//loginFunctions
+
+
 
 
     //Show the Addons selected and work on linkage
@@ -19,6 +25,10 @@ export default function Addonpage(){
     const [lockTitle, setLockTitle] = useState(false)
     const [lockHeading, setLockHeading] = useState(false)
     const [showAddons, setShowAddons] = useState(false)
+
+    //name for submit button
+
+    const [starter, setStarter] = useState(true)
 
     
     function lockTitleTitle(){
@@ -36,6 +46,9 @@ export default function Addonpage(){
     const addHeadingGroup = useDispatch()
 
         function handleAddOnGroup(){
+            setLockTitle(true)
+            setLockHeading(true)
+                setStarter(false)
                 setShowAddons(true)
                 const addOnDetails = [{
                     addOnHeading : addOnHeading,
@@ -127,11 +140,21 @@ export default function Addonpage(){
                     </div>
                 </div>
             <div className='submitBtn'>
-                <button onClick={handleAddOnGroup}>Submit</button>
+                {starter&& addOnTitle&& addOnHeading&& addOnName&& addOnPrice&&  <button onClick={handleAddOnGroup}>Submit</button>}
+                {!starter && lockHeading && lockTitle &&
+                <>
                 <button onClick={handleAddOnsAlone}>Submit Addons Alone</button>
+                </>
+                }
+                {!starter && !lockHeading && lockTitle &&
+                <>
                 <button onClick={handleNewHeadings}>Submit Addons Headings</button>
+                </>
+                }
+
                 <button onClick={clearAll}>Clear All</button>
             </div>
+
                 </div>
 
                 <div className='adddOnSecond'>
@@ -151,7 +174,7 @@ export default function Addonpage(){
                         value={addOnPrice}
                         />
                 </div>
-
+                
                  <div className='adddOnThird'>
                     {/* addon heading space */}
                     {showAddons ? 
@@ -162,6 +185,7 @@ export default function Addonpage(){
                     <ShowAddonsView />
                     </div>
                     <AiOutlineLink size={30}/> 
+                   
                     </div>
                     </>
                     :
@@ -176,8 +200,42 @@ export default function Addonpage(){
                         
                 </div>
 
-            </div>            
+            </div>    
 
+                <div className='quickNoteDiv'>
+                    <div className='twobytwo'>
+                        <div className='insidetwoDiv'>
+                <div className='insideSetDetail'>
+                <p>(to add detail)</p>
+                <p><AiOutlineDoubleRight /> Fill all fields</p>
+                <p><AiOutlineDoubleRight /> Submit button will appear</p>
+                </div>
+
+                <div className='insideSetDetail'>
+                <p>(to continue new heading)</p>
+                <p><AiOutlineDoubleRight /> Lock the Title</p>
+                <p><AiOutlineDoubleRight /> Unlock the Headings</p>
+                </div>
+                    </div>
+
+                    <div className='insidetwoDiv'>
+                         <div className='insideSetDetail'>
+                <p>(to continue adding addons)</p>
+                <p><AiOutlineDoubleRight /> Lock the Title</p>
+                <p><AiOutlineDoubleRight /> Lock the Headings</p>
+                </div>
+
+                <div className='insideSetDetail'>
+                <p><AiOutlineDoubleRight /> click on the link symbol with item </p>
+                <p><AiOutlineDoubleRight /> check</p>
+                </div>
+
+
+
+
+                    </div>
+                    </div>
+            </div>          
 
         </div>
         </>

@@ -4,10 +4,12 @@ import './Loginpage.css'
 import { addCategory } from '../../Redux/Slice/CategorySlice'
 import { addSubCategory } from '../../Redux/Slice/SubCategorySlice'
 import { addItem } from '../../Redux/Slice/Itemslice'
-
+import { AiFillLock } from "react-icons/ai";
+import { AiFillUnlock } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import Addonpage from '../AddonPage/AddonPage'
+import { addCatogoryDB } from './LoginFunctions'
 
 
 export default function LoginPageComp(){
@@ -53,7 +55,9 @@ export default function LoginPageComp(){
 
 
 
-    function handleInitialCategory(){
+    async function handleInitialCategory(){
+
+        
         setMenuCats({
             categoryName : categoryName,
             collection : collection,
@@ -73,6 +77,8 @@ export default function LoginPageComp(){
         setCategoryName('')
         setCollection(false)
         setDelivery(false)
+
+        await addCatogoryDB(categoryName, collection, delivery, inStock)
     }
 
 
@@ -102,10 +108,10 @@ function handleSubCatData(){
     setSubCategory('')
 }
 
+const [foritemLock, setForItemLock] = useState(false)
+
 
 function handleItemUpdater(){
-    
-
     itemDispatch(
         addItem({
         categoryNameItem : categoryNameItem,
@@ -115,6 +121,11 @@ function handleItemUpdater(){
     }))
 }
 
+
+
+function lockerCatandSubCat(){
+    setForItemLock((prev)=> !prev)
+}
 
     return(
         <div className='maindiv'>
@@ -142,6 +153,7 @@ function handleItemUpdater(){
                                 list='categories'
                                 onChange={(e)=> setCategoryName(e.target.value)}
                                 value={categoryName}
+                                disabled = {foritemLock}
                                 />
 
                                 <datalist id='categories'>
@@ -159,6 +171,7 @@ function handleItemUpdater(){
                                 onChange={()=> setCollection((prev)=> !prev)}
                                 value={collection}
                                 checked={collection ? true : false}
+                                disabled = {foritemLock}
                                 />
                                 <p>Collection</p>
 
@@ -167,6 +180,7 @@ function handleItemUpdater(){
                                 onChange={()=> setDelivery((prev)=> !prev)}
                                 value={delivery}
                                 checked={delivery ? true : false}
+                                disabled = {foritemLock}
                                 />
                                 <p>Delivery</p>
                                 </div>
@@ -192,6 +206,7 @@ function handleItemUpdater(){
                         <div className='finalSubmitBtn'>
                             <button className='submitHere' onClick={handleInitialCategory}>Submit</button>
                         </div>
+                        
 
                         </div>
                     </div>
@@ -207,6 +222,7 @@ function handleItemUpdater(){
                                 list='catList1'
                                 onChange={(e)=> onSetSelectedCat(e.target.value)}
                                 value={selectedCat}
+                                disabled = {foritemLock}
                                 />
                                
                                 <datalist id='catList1'>
@@ -222,6 +238,7 @@ function handleItemUpdater(){
                                 className='inputCat'
                                 onChange={(e)=> setSubCategory(e.target.value)}
                                 value={subCategory}
+                                disabled = {foritemLock}
                                 />
                                 
                                 <div className='stockOptions'>
@@ -234,6 +251,8 @@ function handleItemUpdater(){
                                             }
                                 </div>
                                 </div>
+
+
                                 
                                 <div className='finalSubmitBtn'>
                                     {selectedCat
@@ -243,12 +262,16 @@ function handleItemUpdater(){
                                     <h4>Please select category to add your Subcategory</h4>
                                     }
                                 </div>
+                                
                             </div>
-
                             
                     </div>
 
-
+                       {foritemLock ? 
+                        <AiFillLock size={30} onClick={lockerCatandSubCat} /> 
+                        : 
+                        <AiFillUnlock size={30} onClick={lockerCatandSubCat}/>
+                        } 
 
                     {/* item updater */}
 
@@ -299,6 +322,7 @@ function handleItemUpdater(){
 
 
                                 </div>
+
                                 </div>
 
                                 <div className='insideItemUpdater'>
