@@ -10,7 +10,8 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import Addonpage from '../AddonPage/AddonPage'
 import { addCatogoryDB } from './LoginFunctions'
-
+import { addSubCatDB } from './LoginFunctions'
+import {addIteminDB} from './LoginFunctions'
 
 export default function LoginPageComp(){
 
@@ -95,8 +96,10 @@ function handleSubCatOnline(){
 function handleImgUpload(){
     
 }
+  
+async function handleSubCatData(){
 
-function handleSubCatData(){
+    
     subCategoryDispatch(
             addSubCategory({
             category : selectedCat,
@@ -105,13 +108,20 @@ function handleSubCatData(){
         })
 )
 
+    let category = selectedCat
+    let online = subCatOnline
+
+
+    await addSubCatDB(category,subCategory,online)
     setSubCategory('')
+
 }
 
 const [foritemLock, setForItemLock] = useState(false)
 
 
-function handleItemUpdater(){
+async function handleItemUpdater(){
+
     itemDispatch(
         addItem({
         categoryNameItem : categoryNameItem,
@@ -119,6 +129,8 @@ function handleItemUpdater(){
         itemNameBlock : itemNameBlock,
         itemPriceBlock : String(itemPriceBlock)
     }))
+
+    await addIteminDB(categoryNameItem, subCatItSelected, itemNameBlock, itemPriceBlock) 
 }
 
 

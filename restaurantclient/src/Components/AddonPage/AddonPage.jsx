@@ -11,6 +11,9 @@ import './Addonpage.css'
 
 //loginFunctions
 
+import { AddonGroupAdder } from '../LoginPage/LoginFunctions';
+import {AddonHeadingAdder} from '../LoginPage/LoginFunctions'
+import { AddonAdder } from '../LoginPage/LoginFunctions';
 
 
 
@@ -45,7 +48,7 @@ export default function Addonpage(){
     const addOnsDispatch = useDispatch()
     const addHeadingGroup = useDispatch()
 
-        function handleAddOnGroup(){
+       async function handleAddOnGroup(){
             setLockTitle(true)
             setLockHeading(true)
                 setStarter(false)
@@ -61,10 +64,14 @@ export default function Addonpage(){
                     addOnTitle : addOnTitle,
                     addOnDetails : addOnDetails
                 }))
+
+
+
+                await AddonGroupAdder(addOnTitle, addOnHeading, addOnName, addOnPrice)
         }
 
         
-        function handleAddOnsAlone(){
+        async function handleAddOnsAlone(){
 
             addOnsDispatch(addAddons({
                 addOnHeading : addOnHeading,
@@ -72,11 +79,13 @@ export default function Addonpage(){
                 addOnPrice : addOnPrice
 
             }))
+
+            await AddonAdder(addOnTitle, addOnHeading, addOnName, addOnPrice)
                
         }   
 
         
-        function handleNewHeadings(){
+        async function handleNewHeadings(){
 
             const addOnDetails = {
                 addOnHeading : addOnHeading,
@@ -89,6 +98,8 @@ export default function Addonpage(){
             addHeadingGroup(addNewHeadingGroup({
                 addOnDetails : addOnDetails
             }))
+
+            await AddonHeadingAdder(addOnTitle, addOnHeading, addOnName, addOnPrice)
         }
 
         function clearAll(){
