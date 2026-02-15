@@ -1,6 +1,5 @@
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
-
 import EntryPage from '../src/Components/EntryPage/Entry'
 import LoginPageComp from './Components/LoginPage/Loginpage'
 import { Routes, Route } from 'react-router-dom'

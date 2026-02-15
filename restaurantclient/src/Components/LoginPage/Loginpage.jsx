@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Loginpage.css'
 import { addCategory } from '../../Redux/Slice/CategorySlice'
@@ -12,6 +12,7 @@ import Addonpage from '../AddonPage/AddonPage'
 import { addCatogoryDB } from './LoginFunctions'
 import { addSubCatDB } from './LoginFunctions'
 import {addIteminDB} from './LoginFunctions'
+import {uploadImageFunction} from './LoginFunctions'
 
 export default function LoginPageComp(){
 
@@ -53,6 +54,15 @@ export default function LoginPageComp(){
     const [subCatItSelected, setSubCatItSelected] = useState('')
     const [itemNameBlock , setItemNameBlock] = useState('')
     const [itemPriceBlock, setItemPriceBlock] = useState('')
+    const [secureImage, setSecureImage] = useState('')
+    const [loadingStatus, setLoadingStatus] = useState(false)
+    const [showSingleCats, setShowSingleCats] = useState([])
+
+
+    //ref for updating image
+
+    const imageRef = useRef(null)
+
 
 
 
@@ -72,15 +82,52 @@ export default function LoginPageComp(){
             categoryName : categoryName,
             collection : collection,
             delivery : delivery,
-            outofStock : outofStock
+            outofStock : outofStock,
         })
     )
+        await addCatogoryDB(categoryName, collection, delivery, inStock,secureImage)
+    
         setCategoryName('')
         setCollection(false)
-        setDelivery(false)
+        setDelivery(false)        
+        setSecureImage('')
 
-        await addCatogoryDB(categoryName, collection, delivery, inStock)
+        if(imageRef.current){
+            imageRef.current.value = ""
+        }
+
+
     }
+
+
+// main cat with image upload
+
+
+        const handleImgUpload = async (e)=>{
+
+        const file = e.target.files?.[0]
+
+        const formData = new FormData()
+        formData.append('picture', file)
+        
+        setLoadingStatus(true)
+        const uploadImgCloud =  await uploadImageFunction(formData)
+        try{
+            let imageCloud = await uploadImgCloud
+            setSecureImage(imageCloud?.msg?.secure_url)
+            setLoadingStatus(false)
+        
+        }catch(e){
+            console.log(e, 'error')
+        }
+
+    }
+
+
+
+
+
+
 
 
 function handleStocks(){
@@ -93,9 +140,7 @@ function handleSubCatOnline(){
 }
 
 
-function handleImgUpload(){
-    
-}
+
   
 async function handleSubCatData(){
 
@@ -114,6 +159,7 @@ async function handleSubCatData(){
 
     await addSubCatDB(category,subCategory,online)
     setSubCategory('')
+    onSetSelectedCat('')
 
 }
 
@@ -138,6 +184,24 @@ async function handleItemUpdater(){
 function lockerCatandSubCat(){
     setForItemLock((prev)=> !prev)
 }
+
+
+console.log(selectedSubCats)
+
+function showSinglesCats(){
+    let filterOutCat = selectedSubCats.slice(1).map((cats)=>cats.category)
+    let settingOutOnlyCats = new Set([...filterOutCat])    
+    const makeArray = Array.from(settingOutOnlyCats)
+    setShowSingleCats(makeArray)
+}
+
+console.log(showSingleCats, 'the array of cats')
+
+useEffect(()=>{
+    showSinglesCats()
+},[selectedSubCats])
+
+
 
     return(
         <div className='maindiv'>
@@ -211,13 +275,26 @@ function lockerCatandSubCat(){
                         
                         <div className='imgUpload'>
                         <p>Upload category picture</p>
-                        <input type="file" accept='image/*' onChange={handleImgUpload} />
+                        <input
+                        ref={imageRef}
+                        name="picture" 
+                        type="file" 
+                        accept='image/*' 
+                        onChange={handleImgUpload} />
                         </div>
 
+                        {loadingStatus && <p>Loading...</p>}
+                        
+                        {!secureImage  ?
+                        <div>
+                            <p>Submit button will appear once the image is uploaded</p>
+                        </div>
+
+                        :
 
                         <div className='finalSubmitBtn'>
                             <button className='submitHere' onClick={handleInitialCategory}>Submit</button>
-                        </div>
+                        </div> }
                         
 
                         </div>
@@ -285,6 +362,10 @@ function lockerCatandSubCat(){
                         <AiFillUnlock size={30} onClick={lockerCatandSubCat}/>
                         } 
 
+
+
+                        
+
                     {/* item updater */}
 
 
@@ -304,9 +385,9 @@ function lockerCatandSubCat(){
                                     />
 
                                     <datalist id='allCats'>
-                                        {selectedSubCats.slice(1).map((cat, index)=>{
+                                        {[...showSingleCats].map((cat)=>{
                                             return(
-                                                <option value={cat.category} key={index} />
+                                                <option value={cat}  />
                                             )
                                         })}  
                                     </datalist>
@@ -362,9 +443,15 @@ function lockerCatandSubCat(){
                                 
                                 </div>
                                 <div className='insideItemUpdater'>
+                                    {itemNameBlock && itemPriceBlock  ?
                                         <div className='addItemBtn' onClick={handleItemUpdater}>
                                             Add Item 
+                                        </div> 
+                                        :
+                                        <div>
+                                            <p>Add Item and Price to submit</p>
                                         </div>
+                                        }
                                 </div>
 
 
@@ -387,8 +474,18 @@ function lockerCatandSubCat(){
             return(
                 <div key={index} className='catsCxView'>
                     <div className='catNameHere'>
+
+                        <div>
                         <h3>{cats.categoryName}</h3>
+                        </div>
+
+                        <div className='subCatNos'>
+                            {selectedSubCats.filter((allSubCats)=> allSubCats.category == cats.categoryName).length}
+                        </div>
+
                     </div>
+
+
                     
                     
                     <div className='catsDelsStocks'>

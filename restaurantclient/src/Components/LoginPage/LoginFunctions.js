@@ -1,17 +1,18 @@
 import { axiosApi } from "../../../axios.config"
 
-export const addCatogoryDB = async (categoryName, collection, delivery, inStock)=>{
+export const addCatogoryDB = async (categoryName, collection, delivery, inStock,secureImage)=>{
 
     try{
         const postTheCat = await axiosApi.post('/addCategory', {
             categoryName, 
             collection, 
             delivery, 
-            inStock
+            inStock,
+            images : secureImage || 'processing'
         })
 
         const resp = postTheCat.data
-        console.log(resp)
+        console.log(resp, 'resp from cat')
 
     }catch(e){
         console.log(e)
@@ -95,7 +96,7 @@ export const AddonHeadingAdder = async (addOnTitle, addOnHeading, addOnName, add
 export const AddonAdder = async (addOnTitle, addOnHeading, addOnName, addOnPrice) =>{
     try{
 
-        const addOnAdder = await axiosApi.post('/add/addons',{
+        const addOnAdder = await axiosApi.post('/add/addons', {
             addOnTitle,
             addOnHeading,
             addOnName, 
@@ -104,6 +105,23 @@ export const AddonAdder = async (addOnTitle, addOnHeading, addOnName, addOnPrice
 
         const resp = addOnAdder.data
         console.log(resp)
+
+    }catch(e){
+        console.log(e)
+    }
+}
+
+
+export const uploadImageFunction = async (formData)=>{
+    try{
+        const res = await fetch('http://localhost:4444/image/upload/cloud', {
+            method : "POST",
+            "Content-Type": "multipart/form-data",
+            body : formData
+        })
+
+        const resp = await res.json()
+        return resp
 
     }catch(e){
         console.log(e)

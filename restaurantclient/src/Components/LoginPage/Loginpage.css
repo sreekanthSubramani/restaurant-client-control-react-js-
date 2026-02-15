@@ -168,6 +168,9 @@
     width: 200px;
     object-fit: contain;
     text-overflow: clip;
+    display:  flex;
+    flex-direction: row;
+    justify-content: space-between;
  }
  li{
     list-style: none;
@@ -244,4 +247,10 @@ input::-webkit-inner-spin-button {
 .addOnPageDiv{
     height: auto;
     width: auto;
+}
+.subCatNos{
+    background-color: red;
+    padding: 5px;
+    border-radius: 50px;
+
 }
