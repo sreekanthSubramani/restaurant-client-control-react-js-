@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { AiFillLock } from "react-icons/ai";
 import { AiFillUnlock } from "react-icons/ai";
 import ShowAddonsView from './ShowAddonsView/ShowAddons';
-import { AiOutlineLink } from "react-icons/ai";
+import { AiOutlineLink } from "react-icons/ai"; 
 import { AiOutlineDoubleRight } from "react-icons/ai";
+
+
 import './Addonpage.css'
 
 
@@ -111,6 +113,7 @@ export default function Addonpage(){
 
 
         const addOnsHere = useSelector((state)=> state.addOnSlice)
+        console.log(addOnsHere, 'addons here!')
     
     return(
         <>
