@@ -44,3 +44,6 @@
 .editAndDel:hover{
     cursor: pointer;
 }
+.haveInputs{
+    width: 45px;
+}

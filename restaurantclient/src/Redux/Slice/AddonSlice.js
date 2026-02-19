@@ -29,7 +29,7 @@ const sliceForAddon = createSlice({
         addNewHeadingGroup : (state, action)=>{
             state.addOnDetails.push({...action.payload.addOnDetails})
         },
-        addOnDeleter: (state, action) => {
+        addOnDeleter: (state, action) => {  
             const { heading, index } = action.payload;
 
             state.addOnDetails = state.addOnDetails.map((group) => {
@@ -39,14 +39,26 @@ const sliceForAddon = createSlice({
             addOns: group.addOns.filter((_, i) => i !== index),
             };
             }
-    return group;
-  });
-}
+            return group;
+            });
+            },
+        addOnUpdateEditor : (state, action)=>{
+            const {addOnName, addOnPrice,heading, index} = action.payload
+            state.addOnDetails = state.addOnDetails.map((group)=>{
+                if(group.addOnHeading === heading){
+                    group.addOns[index] = {
+                        addOnName : addOnName,
+                        addOnPrice : addOnPrice
+                    }   
+                }
+                return group
+            })
+        }
 
 
 }
 })
 
 
-export const {fullSetAddOn,addAddons,addNewHeadingGroup,addOnDeleter} = sliceForAddon.actions
+export const {fullSetAddOn,addAddons,addNewHeadingGroup,addOnDeleter,addOnUpdateEditor} = sliceForAddon.actions
 export default sliceForAddon.reducer
