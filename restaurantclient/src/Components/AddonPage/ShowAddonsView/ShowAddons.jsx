@@ -1,8 +1,6 @@
 import './ShowAddons.css'
 import { useSelector, useDispatch } from "react-redux"
-import { AiOutlineDelete } from "react-icons/ai";
-import { AiTwotoneEdit } from "react-icons/ai";
-import { AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineDelete,AiTwotoneEdit,AiOutlineCheck} from "react-icons/ai";
 import { addOnDeleter,addOnUpdateEditor } from '../../../Redux/Slice/AddonSlice';
 import { useState } from 'react';
 
@@ -39,11 +37,6 @@ export default function ShowAddonsView(){
         heading : "",
         index : null
       })
-
-
-
-
-
     }
 
 

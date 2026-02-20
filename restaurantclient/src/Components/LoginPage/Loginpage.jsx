@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Loginpage.css'
 import { addCategory } from '../../Redux/Slice/CategorySlice'
@@ -13,6 +13,8 @@ import { addCatogoryDB } from './LoginFunctions'
 import { addSubCatDB } from './LoginFunctions'
 import {addIteminDB} from './LoginFunctions'
 import {uploadImageFunction} from './LoginFunctions'
+import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
+import { AddonConext } from '../../Context/ContextHook'
 
 export default function LoginPageComp(){
 
@@ -24,6 +26,7 @@ export default function LoginPageComp(){
     const selectedCats = useSelector((state)=> state.category)
     const selectedSubCats = useSelector((state)=> state.subCategory)
     const itemAdded = useSelector((state)=> state.addItem)
+    const {  showAddOnScreen, setShowAddonScreen } = useContext(AddonConext)
 
     //menu items here
     const [menuCats, setMenuCats]= useState(
@@ -205,6 +208,11 @@ useEffect(()=>{
 
     return(
         <div className='maindiv'>
+                              {showAddOnScreen && 
+                <div >
+                    <AllAddonViewables />
+                </div>
+                }
 
         <div className='divSplitter'>
         <div className='leftDiv'>

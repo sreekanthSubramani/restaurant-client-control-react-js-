@@ -101,3 +101,14 @@
     width: 250px;
     border: 1px solid green;
 }
+.necessaryLogos{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin-left: 20px;
+    margin-top: 5px;
+    justify-content: flex-start;
+}
+.necessaryLogos:hover{
+    cursor: pointer;
+}

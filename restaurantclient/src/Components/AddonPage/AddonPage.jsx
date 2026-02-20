@@ -1,13 +1,11 @@
 import {useSelector, useDispatch} from 'react-redux'
 import { fullSetAddOn,addAddons,addNewHeadingGroup } from '../../Redux/Slice/AddonSlice';
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { AiFillLock } from "react-icons/ai";
 import { AiFillUnlock } from "react-icons/ai";
 import ShowAddonsView from './ShowAddonsView/ShowAddons';
 import { AiOutlineLink } from "react-icons/ai"; 
-import { AiOutlineDoubleRight } from "react-icons/ai";
-
-
+import { AiOutlineDoubleRight,AiOutlineCloud } from "react-icons/ai";
 import './Addonpage.css'
 
 
@@ -16,6 +14,9 @@ import './Addonpage.css'
 import { AddonGroupAdder } from '../LoginPage/LoginFunctions';
 import {AddonHeadingAdder} from '../LoginPage/LoginFunctions'
 import { AddonAdder } from '../LoginPage/LoginFunctions';
+import { AddonConext } from '../../Context/ContextHook';
+import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
+
 
 
 
@@ -30,10 +31,12 @@ export default function Addonpage(){
     const [lockTitle, setLockTitle] = useState(false)
     const [lockHeading, setLockHeading] = useState(false)
     const [showAddons, setShowAddons] = useState(false)
+    const [showAddonPage, setShowAddonPage] = useState(false)
 
     //name for submit button
 
     const [starter, setStarter] = useState(true)
+    const {  showAddOnScreen, setShowAddonScreen } = useContext(AddonConext)
 
     
     function lockTitleTitle(){
@@ -114,12 +117,21 @@ export default function Addonpage(){
 
         const addOnsHere = useSelector((state)=> state.addOnSlice)
         console.log(addOnsHere, 'addons here!')
-    
+        
+
+        function showAllAddons(){
+            setShowAddonPage((prev)=> !prev)
+            setShowAddonScreen((prev)=> !prev)
+        }
+
+        console.log(showAddOnScreen, 'screen test here')
+
     return(
         <>
+
         <div className='belowHeaderAddon'>  
             {/* full space */}
-
+  
             <div className='insideBelowHeaderAddon'>
                         {/* inside space */}
 
@@ -188,8 +200,12 @@ export default function Addonpage(){
                         value={addOnPrice}
                         />
                 </div>
+
+
                 
                  <div className='adddOnThird'>
+
+                    
                     {/* addon heading space */}
                     {showAddons ? 
                     <>
@@ -198,23 +214,30 @@ export default function Addonpage(){
                     <div className='showAddonsTable'>
                     <ShowAddonsView />
                     </div>
+                    <div className='necessaryLogos'> 
                     <AiOutlineLink size={30}/> 
-                   
+                    <AiOutlineCloud size={30} onClick={showAllAddons}/>
+                    </div>
                     </div>
                     </>
                     :
+                    <>
                     <div className='showAddonsTable'>
                         <div className='withoutAddons'>
                         <p>Your Addons will appear here</p>
                         <h4>Enter details and click Submit</h4>
                         </div>
-                    </div>}
-
-
-                        
+                    </div>
+                    <div className='necessaryLogos'> 
+                    <AiOutlineLink size={30}/> 
+                    <AiOutlineCloud size={30} onClick={showAllAddons}/>
+                    </div>
+                    </>
+                    }                       
                 </div>
-
             </div>    
+
+
 
                 <div className='quickNoteDiv'>
                     <div className='twobytwo'>
