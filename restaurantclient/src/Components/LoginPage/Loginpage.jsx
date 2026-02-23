@@ -14,6 +14,7 @@ import { addSubCatDB } from './LoginFunctions'
 import {addIteminDB} from './LoginFunctions'
 import {uploadImageFunction} from './LoginFunctions'
 import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
+import ShowItemsAdded from '../ItemComponent/ShowAddedItems'
 import { AddonConext } from '../../Context/ContextHook'
 
 export default function LoginPageComp(){
@@ -26,7 +27,7 @@ export default function LoginPageComp(){
     const selectedCats = useSelector((state)=> state.category)
     const selectedSubCats = useSelector((state)=> state.subCategory)
     const itemAdded = useSelector((state)=> state.addItem)
-    const {  showAddOnScreen, setShowAddonScreen } = useContext(AddonConext)
+    const {  showAddOnScreen, showItems  } = useContext(AddonConext)
 
     //menu items here
     const [menuCats, setMenuCats]= useState(
@@ -129,10 +130,6 @@ export default function LoginPageComp(){
 
 
 
-
-
-
-
 function handleStocks(){
     setInStock((prev)=> !prev)
     setOutOfStock((prev)=> !prev)
@@ -189,7 +186,6 @@ function lockerCatandSubCat(){
 }
 
 
-console.log(selectedSubCats)
 
 function showSinglesCats(){
     let filterOutCat = selectedSubCats.slice(1).map((cats)=>cats.category)
@@ -198,7 +194,6 @@ function showSinglesCats(){
     setShowSingleCats(makeArray)
 }
 
-console.log(showSingleCats, 'the array of cats')
 
 useEffect(()=>{
     showSinglesCats()
@@ -212,6 +207,14 @@ useEffect(()=>{
                 <div >
                     <AllAddonViewables />
                 </div>
+                }
+
+                {
+                    showItems &&
+                    <div>
+                        <ShowItemsAdded />
+                    </div>
+                    
                 }
 
         <div className='divSplitter'>
@@ -519,7 +522,7 @@ useEffect(()=>{
                         <p>Stock</p>
                         {cats.outofStock == true ?
                         <div>
-                        <AiOutlineCheck />
+                        <AiOutlineCheck />  
                         </div>
                         :
                         <AiOutlineClose />

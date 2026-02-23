@@ -11,11 +11,10 @@ import './Addonpage.css'
 
 //loginFunctions
 
-import { AddonGroupAdder } from '../LoginPage/LoginFunctions';
+import { AddonGroupAdder, findAllAddons } from '../LoginPage/LoginFunctions';
 import {AddonHeadingAdder} from '../LoginPage/LoginFunctions'
 import { AddonAdder } from '../LoginPage/LoginFunctions';
 import { AddonConext } from '../../Context/ContextHook';
-import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
 
 
 
@@ -36,7 +35,7 @@ export default function Addonpage(){
     //name for submit button
 
     const [starter, setStarter] = useState(true)
-    const {  showAddOnScreen, setShowAddonScreen } = useContext(AddonConext)
+    const {  setShowAddonScreen, setShowAllAddons,setShowItems, showItems } = useContext(AddonConext)
 
     
     function lockTitleTitle(){
@@ -116,15 +115,22 @@ export default function Addonpage(){
 
 
         const addOnsHere = useSelector((state)=> state.addOnSlice)
-        console.log(addOnsHere, 'addons here!')
         
 
-        function showAllAddons(){
+        async function showAllAddonsFunc(){
             setShowAddonPage((prev)=> !prev)
             setShowAddonScreen((prev)=> !prev)
+            const allAddons = await findAllAddons()
+            setShowAllAddons(allAddons.msg)
         }
 
-        console.log(showAddOnScreen, 'screen test here')
+
+        function showItemsHere(){
+            setShowItems(true)
+            console.log('click click')
+        }
+
+        console.log(showItems, 'show items here')
 
     return(
         <>
@@ -215,8 +221,7 @@ export default function Addonpage(){
                     <ShowAddonsView />
                     </div>
                     <div className='necessaryLogos'> 
-                    <AiOutlineLink size={30}/> 
-                    <AiOutlineCloud size={30} onClick={showAllAddons}/>
+                    <AiOutlineCloud size={30} onClick={showAllAddonsFunc}/>
                     </div>
                     </div>
                     </>
@@ -229,8 +234,8 @@ export default function Addonpage(){
                         </div>
                     </div>
                     <div className='necessaryLogos'> 
-                    <AiOutlineLink size={30}/> 
-                    <AiOutlineCloud size={30} onClick={showAllAddons}/>
+                    <AiOutlineLink size={30} onClick={showItemsHere}/> 
+                    <AiOutlineCloud size={30} onClick={showAllAddonsFunc}/>
                     </div>
                     </>
                     }                       

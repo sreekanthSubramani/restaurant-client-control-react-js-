@@ -1,4 +1,5 @@
 import { axiosApi } from "../../../axios.config"
+import {useQuery} from '@tanstack/react-query'
 
 export const addCatogoryDB = async (categoryName, collection, delivery, inStock,secureImage)=>{
 
@@ -127,3 +128,29 @@ export const uploadImageFunction = async (formData)=>{
         console.log(e)
     }
 }
+
+
+export const findAllAddons = async ()=>{
+
+    try{
+        const getAllAddons = await axiosApi.get('/show/allAddons')
+        const data = await getAllAddons.data
+        return data
+
+    }catch(e){
+        console.log(e, 'error here')
+    }
+}
+
+
+export const showItemshereApi = async ()=>{
+    try{
+        const getItemsBeenAdded = await axiosApi('/show/items')
+        return getItemsBeenAdded.data
+
+    }catch(e){
+        console.log(e)
+    }
+}
+
+
