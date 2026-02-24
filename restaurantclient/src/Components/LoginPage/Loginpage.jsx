@@ -9,13 +9,11 @@ import { AiFillUnlock } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import Addonpage from '../AddonPage/AddonPage'
-import { addCatogoryDB } from './LoginFunctions'
-import { addSubCatDB } from './LoginFunctions'
-import {addIteminDB} from './LoginFunctions'
-import {uploadImageFunction} from './LoginFunctions'
+import { addCatogoryDB,sendCategories,addSubCatDB,addIteminDB,uploadImageFunction,sendSubCategories } from './LoginFunctions'
 import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
 import ShowItemsAdded from '../ItemComponent/ShowAddedItems'
 import { AddonConext } from '../../Context/ContextHook'
+import { useQuery } from '@tanstack/react-query'
 
 export default function LoginPageComp(){
 
@@ -200,6 +198,22 @@ useEffect(()=>{
 },[selectedSubCats])
 
 
+//tanstack query here
+
+const categoryCacheQuery = useQuery({
+    queryKey : ['category'],
+    queryFn : sendCategories
+})
+
+const subCategoryCacheQuery = useQuery({
+    queryKey : ['subcats'],
+    queryFn : sendSubCategories
+})
+
+
+
+console.log(subCategoryCacheQuery.data, 'selected sub cats')
+
 
     return(
         <div className='maindiv'>
@@ -244,11 +258,21 @@ useEffect(()=>{
                                 />
 
                                 <datalist id='categories'>
-                                {categories.map((cats, index)=>{
+                                {!categoryCacheQuery.data 
+                                ? 
+                                categories.map((cats, index)=>{
                                     return(
                                     <option value={cats} key={index}/>
                                 )
-                                })}
+                                })
+                            
+                                :
+                                categoryCacheQuery.data.map((cats, index)=>{
+                                    return(
+                                        <option value={cats.categoryName} key={index} />
+                                    )
+                                })
+                                }
                                 </datalist>
   
 
@@ -326,11 +350,21 @@ useEffect(()=>{
                                 />
                                
                                 <datalist id='catList1'>
-                                    {selectedCats.slice(1).map((elem, index)=>{
+                                    {!categoryCacheQuery.data
+                                    ?
+                                    selectedCats.slice(1).map((elem, index)=>{
                                         return(
                                             <option key={index} value={elem.categoryName} />
                                         )
-                                    })}
+                                    })
+                                :
+                                
+                                    categoryCacheQuery.data.map((cats, index)=>{
+                                    return(
+                                        <option value={cats.categoryName} key={index} />
+                                    )
+                                })
+                                }
                                 </datalist>
                                 
                                 <input 
@@ -396,11 +430,23 @@ useEffect(()=>{
                                     />
 
                                     <datalist id='allCats'>
-                                        {[...showSingleCats].map((cat)=>{
+                                    {!categoryCacheQuery.data
+                                    ?
+                                       
+                                        [...showSingleCats].map((cat)=>{
                                             return(
                                                 <option value={cat}  />
                                             )
-                                        })}  
+                                        })
+                                    :
+
+                                     categoryCacheQuery.data.map((cats, index)=>{
+                                    return(
+                                        <option value={cats.categoryName} key={index} />
+                                    )
+                                })
+                                    
+                                    }  
                                     </datalist>
                                 
                                 </div>
@@ -416,11 +462,17 @@ useEffect(()=>{
                                     />
 
                                     <datalist id='subCatsSelection'>
-                                        {selectedSubCats.filter(subCats=> subCats.category == categoryNameItem).map((elem, index)=>{
+                                        {!subCategoryCacheQuery.data
+                                        ?
+                                        selectedSubCats.filter(subCats=> subCats.category == categoryNameItem).map((elem, index)=>{
                                             return(
                                                 <option value={elem.subCategory} key={index} />
                                             )
-                                        })}
+                                        })
+                                    :
+                                        null
+                                    
+                                    }
 
                                     </datalist>
 

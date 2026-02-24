@@ -154,3 +154,24 @@ export const showItemshereApi = async ()=>{
 }
 
 
+
+export const sendCategories = async ()=>{
+    try{
+        const getCats = await axiosApi('/send/category')
+        const res = getCats?.data
+        return res?.msg
+    }catch(e){
+        console.log(e)
+    }
+}
+
+
+export const sendSubCategories = async ()=>{
+    try{
+        const getCats = await axiosApi('/send/subCat')
+        const res = getCats?.data
+        return res?.msg
+    }catch(e){
+        console.log(e)
+    }
+}
