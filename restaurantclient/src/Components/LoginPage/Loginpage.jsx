@@ -13,7 +13,7 @@ import { addCatogoryDB,sendCategories,addSubCatDB,addIteminDB,uploadImageFunctio
 import AllAddonViewables from '../ShowAllAddons/AllAddonViewables';
 import ShowItemsAdded from '../ItemComponent/ShowAddedItems'
 import { AddonConext } from '../../Context/ContextHook'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function LoginPageComp(){
 
@@ -64,8 +64,14 @@ export default function LoginPageComp(){
     //ref for updating image
 
     const imageRef = useRef(null)
+    const queryClient = useQueryClient()
 
-
+            const mutation = useMutation({
+            mutationFn : sendCategories,
+            onSuccess : ()=>{
+                queryClient.invalidateQueries({queryKey : ['category']})
+            }
+        })
 
 
     async function handleInitialCategory(){
@@ -97,6 +103,15 @@ export default function LoginPageComp(){
         if(imageRef.current){
             imageRef.current.value = ""
         }
+
+     
+        mutation.mutate({
+            categoryName, 
+            collection, 
+            delivery, 
+            inStock,
+            secureImage
+        })
 
 
     }
@@ -210,9 +225,35 @@ const subCategoryCacheQuery = useQuery({
     queryFn : sendSubCategories
 })
 
+console.log(subCategoryCacheQuery.data, 'sub cat cache')
 
 
-console.log(subCategoryCacheQuery.data, 'selected sub cats')
+
+const [showSubCatDB, setShowSubCatDB] = useState([])
+
+
+useEffect(()=>{
+
+        const scatCache = subCategoryCacheQuery.data
+
+        if(scatCache){
+        const filterOnlyRelatedSubCats =  scatCache.filter(subs => subs?.category.categoryName === categoryNameItem)
+        if(filterOnlyRelatedSubCats){
+            console.log('into if block')
+            let filterSubs = filterOnlyRelatedSubCats.map(sub=>{return sub.subCategory})
+            setShowSubCatDB(filterSubs)
+        }else{
+
+            console.log('went to else block')
+            const filterOnlyRelatedSubCats =  scatCache.filter(subs => subs?.category.categoryName === categoryNameItem)
+            let filterSubs = filterOnlyRelatedSubCats.map(sub=>{return sub.subCategory})
+            setShowSubCatDB(filterSubs)
+
+
+        }}},[categoryNameItem])
+
+
+// console.log(showSubCatDB, ' show ')
 
 
     return(
@@ -470,8 +511,9 @@ console.log(subCategoryCacheQuery.data, 'selected sub cats')
                                             )
                                         })
                                     :
-                                        null
-                                    
+                                        showSubCatDB.map((allItems,index)=>{return(
+                                            <option value={allItems} key={index} />
+                                        )})
                                     }
 
                                     </datalist>
@@ -533,8 +575,10 @@ console.log(subCategoryCacheQuery.data, 'selected sub cats')
         <div className='rightDiv'>
             <div className='cxViewHeading'>
             <p className='cxViewHeading'>Customer View</p>
-                    {selectedCats.slice(1).map((cats,index)=>{
-            return(
+                    { !categoryCacheQuery.data
+                    ?
+                    selectedCats.slice(1).map((cats,index)=>{
+                    return(
                 <div key={index} className='catsCxView'>
                     <div className='catNameHere'>
 
@@ -587,7 +631,62 @@ console.log(subCategoryCacheQuery.data, 'selected sub cats')
                 </div>
 
             )
-        })}
+        })
+        
+        :
+        
+        categoryCacheQuery.data.map((cats, index)=>{
+            return(
+                <div key={index} className='catsCxView'>
+                    <div className='catNameHere'>
+
+                        <div>
+                        <h3>{cats.categoryName}</h3>
+                        </div>
+                    </div>
+
+
+                    
+                    
+                    <div className='catsDelsStocks'>
+                        {/* cols delivery stocks */}
+                    <div className='microContent'> 
+                        <p>Collection</p>
+                        {cats.collection == true ?
+                        <p style={{color : "green"}}>Open</p>
+                        :
+                        <p style={{color : 'red'}}>Close</p>
+                        }
+                    </div>
+
+                    <div className='microContent'>
+                        <p>Delivery</p>
+                        {cats.delivery == true ?
+                        <p style={{color : "green"}}>Open</p>
+                        :
+                        <p style={{color : 'red'}}>Close</p>
+                        }
+                    </div>
+                        <div className='microContent'>
+                        <p>Stock</p>
+                        {cats.stockIn === false ?
+                        <div>
+                        <AiOutlineCheck />  
+                        </div>
+                        :
+                        <AiOutlineClose />
+                        }
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            )
+        })
+        
+        }
             </div>
         </div>
 
