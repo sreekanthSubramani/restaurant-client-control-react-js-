@@ -6,6 +6,7 @@ const StoreProvider = (props)=>{
     const [showAddOnScreen, setShowAddonScreen] = useState(false)
     const [showAllAddons, setShowAllAddons] = useState([])
     const [showItems, setShowItems] = useState(false)
+    const [addOnComp, setAddOnComp] = useState(false)
 
     const contextValue = {
         showAddOnScreen,
@@ -13,7 +14,9 @@ const StoreProvider = (props)=>{
         showAllAddons,
         setShowAllAddons,
         showItems,
-        setShowItems
+        setShowItems,
+        addOnComp, 
+        setAddOnComp
     }
 
     return(

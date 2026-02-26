@@ -4,8 +4,14 @@
     background-color: 'rgba(255,255,255,0.2)';
     object-fit: contain;
     overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
-
+.firstCut{
+    display: flex;
+    flex-direction: column;
+}
 .eachItems{
     display:  flex;
     flex-direction: column;
@@ -18,4 +24,13 @@
 }
 .touchCursor{
     cursor: pointer;
+}
+.inputTagItems{
+    background-color: white;
+    width: 400px;
+}
+.setRowDir{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
