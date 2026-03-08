@@ -9,11 +9,9 @@ import './itemsPage.css'
 export default function ShowItemsAdded(){
     const {setShowItems} = useContext(AddonConext)
     const [showItemsHere, setShowItemsHere] = useState([])
-    const [categoryLists, setCategoryLists] = useState([])
-    const [propCat, setPropCat] = useState('')
+    const [showAddonPage, setAddonPage] = useState(false)
 
-
-    const {addOnComp, setAddOnComp} = useContext(AddonConext)
+    const {setAddOnComp} = useContext(AddonConext)
 
     function handleClosure(){
         setShowItems((prev)=>!prev)
@@ -36,19 +34,18 @@ useEffect(() => {
     console.log(showItemsHere, 'show items here')
 
     function handleAddOnLink(name){
-        setPropCat(name)
-        setAddOnComp(true)
-        
+        setAddOnComp(name)
+        setAddonPage(true)
     }
 
 
     return(
         <div className="showAddedItems">
-            {
-                addOnComp ?
-                <AddonLinkItem propCat={propCat}/>
-                :
-                null
+            {showAddonPage 
+            ?
+            <AddonLinkItem  setAddonPage={setAddonPage}/>
+            :
+            null
             }
             <div className="firstCut">
             <p>Search your item</p>

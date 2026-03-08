@@ -175,3 +175,29 @@ export const sendSubCategories = async ()=>{
         console.log(e)
     }
 }
+
+export const linkAddonToItem = async (addOn, item) =>{
+    try{
+        const sendAddOn = await axiosApi.post('/link/this',{
+           addOnId :  addOn,
+           item : item
+        })
+
+        return sendAddOn.data
+
+    }catch(e){
+        console.log(e)
+    }
+}   
+
+
+export const showFullAddon = async (adTitle)=>{
+        try{
+            const sendAddonToBackend = await axiosApi.post('/show/addon', {
+                adTitle
+            })
+            return sendAddonToBackend?.data.msg
+        }catch(e){
+            console.log(e)
+        }
+}

@@ -2,15 +2,26 @@ import { useContext } from "react";
 import { AddonConext } from "../../../Context/ContextHook";
 import { AiOutlineClose } from "react-icons/ai";
 import './AddOnLinkItem.css'
+import { linkAddonToItem } from "../../LoginPage/LoginFunctions";
 
-export default function AddonLinkItem({propCat}){
 
-    const {setAddOnComp} = useContext(AddonConext)
+export default function AddonLinkItem({setAddonPage}){
+
+    const {addOnComp,showAllAddons} = useContext(AddonConext)
     function closeAddOnTab(){
-        setAddOnComp(false)
+        setAddonPage(false)
     }
 
-    console.log(propCat, 'prop cat')
+
+    async function linkTheseAddon(addon, item){
+
+        const sendAddonID = await linkAddonToItem(addon, item)
+        if(sendAddonID){
+            console.log(sendAddonID)
+        }
+    }   
+
+    console.log(showAllAddons, 'show all addons')
 
     return(
         <div className='mainBGAddon'>
@@ -18,9 +29,25 @@ export default function AddonLinkItem({propCat}){
                 <AiOutlineClose  onClick={closeAddOnTab}/>
 
                 <div className="itemHeading">
-                <h1 className="itemHeadingH">{propCat}</h1>
+                <h1 className="itemHeadingH">{addOnComp}</h1>
 
-                    <p>Choose your add on to link</p>
+                    <p className="bgCol">Choose your add on to link</p>
+                    <h3 className="bgCol">Click any addon at bottom to link it with the item</h3>
+
+
+                </div>
+
+                <div className="selectAddonDiv">
+
+            {showAllAddons?.map((heads, index)=>{
+                return(
+                    <div key={index} className="boxerInside">
+                        <h4>{heads.addOnTitile}</h4>
+                        <button className="btnHere" onClick={()=>linkTheseAddon(heads._id,addOnComp)}>Link</button>
+                    </div>
+                )
+            })}
+
 
                 </div>
 

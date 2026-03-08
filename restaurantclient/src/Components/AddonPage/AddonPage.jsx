@@ -16,6 +16,8 @@ import {AddonHeadingAdder} from '../LoginPage/LoginFunctions'
 import { AddonAdder } from '../LoginPage/LoginFunctions';
 import { AddonConext } from '../../Context/ContextHook';
 
+import {useNavigate} from 'react-router-dom'
+
 
 
 
@@ -30,12 +32,11 @@ export default function Addonpage(){
     const [lockTitle, setLockTitle] = useState(false)
     const [lockHeading, setLockHeading] = useState(false)
     const [showAddons, setShowAddons] = useState(false)
-    const [showAddonPage, setShowAddonPage] = useState(false)
 
     //name for submit button
 
     const [starter, setStarter] = useState(true)
-    const {  setShowAddonScreen, setShowAllAddons,setShowItems, showItems } = useContext(AddonConext)
+    const {  setShowAllAddons,setShowItems, showItems } = useContext(AddonConext)
 
     
     function lockTitleTitle(){
@@ -115,19 +116,20 @@ export default function Addonpage(){
 
 
         const addOnsHere = useSelector((state)=> state.addOnSlice)
+
+        const navigate = useNavigate()
+
         
 
         async function showAllAddonsFunc(){
-            setShowAddonPage((prev)=> !prev)
-            setShowAddonScreen((prev)=> !prev)
+
             const allAddons = await findAllAddons()
             setShowAllAddons(allAddons.msg)
+            navigate('/items')
         }
 
-
-        function showItemsHere(){
-            setShowItems(true)
-            console.log('click click')
+        function showItemsHere(){   
+            navigate('/addon')
         }
 
         console.log(showItems, 'show items here')
